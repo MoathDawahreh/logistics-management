@@ -1,0 +1,6 @@
+export const ENV = {
+  MONGODB_URI: 'MONGODB_URI',
+  JWT_SECRET: 'JWT_SECRET',
+  RT_SECRET: 'RT_SECRET',
+  HEADER_SECRET: 'HEADER_SECRET',
+} as const;
