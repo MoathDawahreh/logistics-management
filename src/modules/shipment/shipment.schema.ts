@@ -22,7 +22,7 @@ export class Shipment {
   @Prop({ required: true })
   destination: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: 'Standard'})
   deliveryPreferences: string;
 
   @Prop({ enum: ShipmentStatus, default: ShipmentStatus.PENDING })

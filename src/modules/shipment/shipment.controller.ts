@@ -7,9 +7,10 @@ import {
   Body,
   Param,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport'; // Import the JWT authentication guard
-import { ShipmentDto } from './dto/shipment.dto'; // Define DTOs for shipment data
+import { DeliveryRoute, ShipmentDto } from './dto/shipment.dto'; // Define DTOs for shipment data
 import { Roles, getCurrentUser } from 'src/common/decorators';
 import { ShipmentService } from './shipment.service';
 import { AccessTokenGuard } from '../auth/guards';
@@ -47,14 +48,24 @@ export class ShipmentController {
     return this.shipmentService.getShipmentById(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @Roles(ROLES.SUPER_ADMIN)
+  @Roles(ROLES.SUPER_ADMIN, ROLES.USER)
   async updateShipment(
     @Param('id') id: string,
     @Body() shipmentDto: ShipmentDto,
   ) {
     return this.shipmentService.updateShipment(id, shipmentDto);
+  }
+
+  @Patch(':id/delivery-route')
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles(ROLES.SUPER_ADMIN, ROLES.USER)
+  async updateDeliveryRoute(
+    @Param('id') id: string,
+    @Body() deliveryRoute: DeliveryRoute,
+  ) {
+    return this.shipmentService.updateDeliveryRoute(id, deliveryRoute);
   }
 
   @Delete(':id')

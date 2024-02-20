@@ -10,6 +10,7 @@ import {
   ProducerRecord,
   ConsumerSubscribeTopics,
   ConsumerRunConfig,
+  //   ConsumerSubscribeTopic,
 } from 'kafkajs';
 @Injectable()
 export class ConsumerService implements OnApplicationShutdown {
@@ -22,9 +23,13 @@ export class ConsumerService implements OnApplicationShutdown {
     });
   }
 
-  async consume(topic: ConsumerSubscribeTopics, config: ConsumerRunConfig) {
+  async consume(
+    topic: ConsumerSubscribeTopics,
+    config: ConsumerRunConfig,
+    groupId: string,
+  ) {
     const consumer = this.kafka.consumer({
-      groupId: 'shipment-tracking-group',
+      groupId,
     });
     await consumer.connect();
     await consumer.subscribe(topic);

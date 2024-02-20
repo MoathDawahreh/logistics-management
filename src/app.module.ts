@@ -12,6 +12,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { KafkaModule } from './modules/kafka/kafka.module';
 import * as redisStore from 'cache-manager-redis-store';
 import { TestConsumer } from './test.consumer';
+import { ShipmentConsumer } from './shipment.consumer';
 
 @Module({
   imports: [
@@ -51,6 +52,6 @@ import { TestConsumer } from './test.consumer';
     KafkaModule,
   ],
   controllers: [AppController],
-  providers: [AppService, TestConsumer],
+  providers: [AppService, TestConsumer, ShipmentConsumer],
 })
 export class AppModule {}

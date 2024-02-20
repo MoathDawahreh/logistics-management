@@ -1,15 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Shipment, ShipmentDocument } from './shipment.schema';
-import { ShipmentDto } from './dto';
+import { DeliveryRoute, ShipmentDto } from './dto';
 import { ProducerService } from '../kafka/producer.service';
+// import { ConsumerService } from '../kafka/consumer.service';
 
 @Injectable()
-export class ShipmentService {
+export class ShipmentService  {
   constructor(
     @InjectModel(Shipment.name) private shipmentModel: Model<ShipmentDocument>,
     private readonly producerService: ProducerService,
+    // private readonly consumerService: ConsumerService,
   ) {}
 
   async createShipment(
@@ -27,11 +29,18 @@ export class ShipmentService {
     shipmentId: string,
     updateData: ShipmentDto,
   ): Promise<Shipment> {
-    const shipment = (await this.getShipmentById(
+    const updatedShipment = await this.shipmentModel.findByIdAndUpdate(
       shipmentId,
-    )) as ShipmentDocument;
-    Object.assign(shipment, updateData);
-    return shipment.save();
+      updateData,
+      { new: true },
+    );
+
+    await this.producerService.produce({
+      topic: 'shipment-updates',
+      messages: [{ value: JSON.stringify(updatedShipment) }],
+    });
+
+    return updatedShipment;
   }
 
   async getShipmentById(shipmentId: string): Promise<Shipment> {
@@ -51,25 +60,26 @@ export class ShipmentService {
   async getUserShipments(userId: string): Promise<Shipment[]> {
     return this.shipmentModel.find({ user: userId }).populate('user').exec();
   }
+  // async onModuleInit() {
+  //   await this.consumerService.consume(
+  //     {
+  //       topics: ['shipment-updates'],
+  //     },
+  //     {
+  //       eachMessage: async ({ topic, partition, message }) => {
+  //         const shipmentUpdate = JSON.parse(message.value.toString());
+  //         // Process the shipment update
+  //         console.log('Received shipment update:', shipmentUpdate);
+  //         // Possibly send the update to connected clients via WebSocket
+  //       },
+  //     },
+  //   );
+  // }
 
-  async updatedeliveryRoute(
+  async updateDeliveryRoute(
     shipmentId: string,
-    updateData: ShipmentDto,
-  ): Promise<Shipment> {
-    const shipment = (await this.getShipmentById(
-      shipmentId,
-    )) as ShipmentDocument;
-    Object.assign(shipment, updateData);
+    deliveryRoute: DeliveryRoute,
+  ): Promise<any> {}
 
-    await this.producerService.produce({
-      topic: 'test',
-      messages: [
-        {
-          key: shipmentId,
-          value: 'Hello its moath.. ', //JSON.stringify(shipment),
-        },
-      ],
-    });
-    return shipment.save();
-  }
+  async getRealTimeShipmentUpdates(shipmentId: string): Promise<any> {}
 }
