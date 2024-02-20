@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Shipment, ShipmentDocument } from './shipment.schema';
 import { ShipmentDto } from './dto';
+import { ProducerService } from '../kafka/producer.service';
 
 @Injectable()
 export class ShipmentService {
   constructor(
     @InjectModel(Shipment.name) private shipmentModel: Model<ShipmentDocument>,
+    private readonly producerService: ProducerService,
   ) {}
 
   async createShipment(
@@ -48,5 +50,26 @@ export class ShipmentService {
 
   async getUserShipments(userId: string): Promise<Shipment[]> {
     return this.shipmentModel.find({ user: userId }).populate('user').exec();
+  }
+
+  async updatedeliveryRoute(
+    shipmentId: string,
+    updateData: ShipmentDto,
+  ): Promise<Shipment> {
+    const shipment = (await this.getShipmentById(
+      shipmentId,
+    )) as ShipmentDocument;
+    Object.assign(shipment, updateData);
+
+    await this.producerService.produce({
+      topic: 'test',
+      messages: [
+        {
+          key: shipmentId,
+          value: 'Hello its moath.. ', //JSON.stringify(shipment),
+        },
+      ],
+    });
+    return shipment.save();
   }
 }

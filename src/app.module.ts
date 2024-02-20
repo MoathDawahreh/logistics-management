@@ -9,7 +9,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { ShipmentsModule } from './modules/shipment/shipment.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { KafkaModule } from './modules/kafka/kafka.module';
 import * as redisStore from 'cache-manager-redis-store';
+import { TestConsumer } from './test.consumer';
 
 @Module({
   imports: [
@@ -45,12 +47,10 @@ import * as redisStore from 'cache-manager-redis-store';
       }),
     }),
     UserModule,
-
     ShipmentsModule,
+    KafkaModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TestConsumer],
 })
 export class AppModule {}
-
- 
