@@ -9,7 +9,6 @@ services:
     depends_on:
       - mongodb
       - redis
-      - kafka
     networks:
       - local
 

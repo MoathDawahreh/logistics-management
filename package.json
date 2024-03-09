@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "docker": "docker run -p 3000:3000 --env-file .env --name offside-app offside-app",
+    "docker": "docker run -p 3000:3000 --env-file .env --name logistics-app logistics-app",
     "docker:build": "docker-compose up --build",
     "start:db": "docker-compose up mongodb -d",
     "start:kafka": "docker-compose up kafka -d",

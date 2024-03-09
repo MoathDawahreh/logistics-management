@@ -28,7 +28,6 @@ export class RTStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
 
   async validate(req: Request, payload: { id: string; role: string }) {
     try {
-      //todo: get user from db
       const user = { venue: { id: '1' } };
 
       if (!user) throw new NotFoundException('User not found!');

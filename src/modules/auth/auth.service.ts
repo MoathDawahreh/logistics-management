@@ -59,18 +59,12 @@ export class AuthService {
 
       await this.emailService.sendEmail(
         user.email,
-        'Welcome to Vuedale!',
-        'Welcome to Vuedale! We are glad to have you on board!',
+        'Nice to have you with us!!',
+        'Welcome! Moath is sending you greatings! we are glad to have you on board!',
       );
 
       return { user: serializedUser, tokens };
     } catch (error) {
-      if (error.code === 11000)
-        throw new UnprocessableEntityException({
-          message: error.message,
-          target: error.keyValue,
-          code: 1001,
-        });
       throw error;
     }
   }
@@ -158,16 +152,6 @@ export class AuthService {
         throw new NotFoundException({
           message: `User with email ${dto.email} not found!`,
         });
-
-      // if (!user.isActive)
-      //   this.prisma.admin.update({
-      //     where: {
-      //       id: user.id,
-      //     },
-      //     data: {
-      //       isActive: true,
-      //     },
-      //   });
 
       // if the user exsits check if the passowrd correct
       const pwMatches = await argon.verify(user.password, dto.password);

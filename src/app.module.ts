@@ -13,6 +13,8 @@ import { KafkaModule } from './modules/kafka/kafka.module';
 import * as redisStore from 'cache-manager-redis-store';
 import { TestConsumer } from './test.consumer';
 import { ShipmentConsumer } from './shipment.consumer';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from './common/filter/global-error-exception-filter';
 
 @Module({
   imports: [
@@ -25,12 +27,26 @@ import { ShipmentConsumer } from './shipment.consumer';
       }),
     }),
     AuthModule,
-    BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+        },
+      }),
     }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+      }),
+    }),
+
     // CacheModule.register({
     //   isGlobal: true,
     //   store: redisStore,
@@ -52,6 +68,11 @@ import { ShipmentConsumer } from './shipment.consumer';
     KafkaModule,
   ],
   controllers: [AppController],
-  providers: [AppService, TestConsumer, ShipmentConsumer],
+  providers: [AppService, TestConsumer, ShipmentConsumer,
+   {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

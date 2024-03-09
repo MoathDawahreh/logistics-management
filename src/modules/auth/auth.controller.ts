@@ -50,7 +50,6 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
   logout(@getCurrentUser() user: UserDocument) {
-    console.log('user', user.id);
     this.authService.logout(user.id, user.role);
   }
 

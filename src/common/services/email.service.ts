@@ -10,9 +10,8 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
-        // TODO: create env constants
-        user: this.config.get('EMAIL'), //'vuedalebot@gmail.com',
-        pass: this.config.get('EMAIL_PASS'), //'igew rhuv xsjr pnot',
+        user: this.config.get('EMAIL'),
+        pass: this.config.get('EMAIL_PASS'),
       },
     });
   }
