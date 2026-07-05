@@ -37,7 +37,7 @@
     "@nestjs/platform-express": "^11.1.16",
     "@nestjs/platform-socket.io": "^11.1.16",
     "@nestjs/websockets": "^11.1.16",
-    "argon2": "^0.31.2",
+    "argon2": "^0.44.0",
     "cache-manager": "^6.4.3",
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
