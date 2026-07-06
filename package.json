@@ -79,6 +79,7 @@
     "typescript": "^5.3.3"
   },
   "overrides": {
+    "validator": "13.15.35",
     "js-yaml": "4.3.0",
     "multer": "2.2.0"
   },
