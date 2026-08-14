@@ -12,3 +12,4 @@ updates:
       - dependency-type: "all"
     pull-request-branch-name:
       separator: "/"
+    rebase-strategy: "auto"
