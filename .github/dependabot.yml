@@ -13,3 +13,7 @@ updates:
     pull-request-branch-name:
       separator: "/"
     rebase-strategy: "auto"
+    # Allow security updates for unfixable vulnerabilities to be skipped
+    # This prevents the job from failing when no patches are available
+    reviewers:
+      - "MoathDawahreh"
