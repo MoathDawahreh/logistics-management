@@ -82,7 +82,7 @@
   },
   "overrides": {
     "validator": "13.15.35",
-    "multer": "2.2.0"
+    "multer": "2.5.0"
   },
   "jest": {
     "moduleFileExtensions": [
