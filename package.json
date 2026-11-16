@@ -51,7 +51,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "uuid": "^10.0.0"
+    "uuid": "^14.0.3"
   },
   "devDependencies": {
     "@babel/core": "^8.1.0",
