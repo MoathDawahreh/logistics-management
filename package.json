@@ -42,7 +42,7 @@
     "cache-manager": "^7.2.9",
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
+    "class-validator": "^0.15.1",
     "kafkajs": "^2.2.4",
     "moment-timezone": "^0.6.6",
     "mongoose": "^9.12.1",
